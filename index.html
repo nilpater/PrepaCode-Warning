@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preload" href="assets/img/Logo_02.webp" as="image">
+    <title>PrepaCode - Entraînement</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#8E5AA9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PrepaCode">
+    <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+
+<script>
+  // Enregistrement du Service Worker
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('SW enregistré !'))
+        .catch(err => console.log('Erreur SW', err));
+    });
+}
+</script>
+</head>
+
+<body>
+    <div id="legal-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>⚠️ AVERTISSEMENT JURIDIQUE ⚠️</h3>
+        <p>Cette série est la propriété exclusive <br>de <strong>WARNING AUTO-MOTO ECOLE</strong>.</p>
+        <p>Prendre en photo ou filmer ce contenu <br>(partiellement ou intégralement) est strictement interdit.</p>
+        <p style="background: #fff5f5; padding: 10px; border-radius: 8px; border: 1px solid #feb2b2;">
+            <strong>SANCTION :</strong> Amende de <strong>36 015 243 Fcfp</strong> <br>et 
+            <strong>5 ANS D'INTERDICTION</strong> de passer le permis.
+        </p>
+        <p>Toute fraude entraînera une exclusion <br>temporaire ou définitive de la salle de code.</p>
+        <button class="btn-main" onclick="closeLegalModal()" style="width: 100%; margin-top: 10px;">
+            J'AI COMPRIS ET J'ACCEPTE
+        </button>
+    </div>
+</div>
+<div class="container">
+    <div class="logo-container">
+        <picture>
+            <source srcset="assets/img/Logo_02.webp" type="image/webp">
+            <img src="assets/img/Logo_02.png" alt="Logo Warning Auto Moto École" class="logo-img">
+        </picture>
+    </div>
+
+    <div class="app-card" id="quiz-app">
+        <div class="header">
+            <h2 id="title">Entraînement au Code</h2>
+            <p class="sub">Choisissez votre thématique. Utilisez les touches A, B, C ou D pour répondre. 
+                Validez vos choix pour progresser et accédez à votre correction détaillée à la fin.</p>
+            
+            <div class="selection-group">
+                <div class="select-wrapper">
+                    <label>Dossier :</label>
+                    <select id="folder-select" onchange="updateSeriesDropdown()">
+                        <option value="dossier1">Dossier 1</option>
+                        <option value="dossier2">Dossier 2</option>
+                    </select>
+                </div>
+                <div class="select-wrapper">
+                    <label>Série :</label>
+                    <select id="series-select" onchange="initSession()">
+                        </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="chart-section" style="margin-bottom: 20px;">
+            <canvas id="scoreChart"></canvas>
+        </div>
+
+        <div id="history-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h4 style="margin: 0; color: var(--primary); font-size: 0.9rem;">Dernières sessions</h4>
+                <button onclick="clearHistory()" style="background: none; border: none; color: var(--danger); font-size: 0.7rem; cursor: pointer; text-decoration: underline;">Effacer tout</button>
+            </div>
+            <div id="history-container"></div>
+        </div>
+
+        <div id="exam-ui">
+            <div class="progress-container">
+                <span id="q-number">Question 1/40</span>
+                <div class="progress-bar"><div id="progress-fill"></div></div>
+            </div>
+
+            <div class="answer-list">
+                <button class="ans-btn" data-val="A">A</button>
+                <button class="ans-btn" data-val="B">B</button>
+                <button class="ans-btn" data-val="C">C</button>
+                <button class="ans-btn" data-val="D">D</button>
+            </div>
+
+            <div class="controls">
+                <button class="btn-main" id="next-btn" onclick="nextQuestion()">VALIDER LA RÉPONSE</button>
+            </div>
+        </div>
+
+        <div id="results" class="results-box">
+            <h1 id="final-score">00/40</h1>
+            <p id="feedback"></p> 
+            <div id="error-list"></div>
+            <button class="btn-main" onclick="initSession()" style="margin-top: 20px;">Recommencer la série</button>
+        </div>
+    </div>
+    <footer class="app-footer">
+    <p>&copy; <span id="current-year"></span> PrepaCode - Tous droits réservés.</p>
+    <p style="font-size: 0.7rem; opacity: 0.6;">Propriété exclusive de Warning Auto-Moto Ecole. Toute reproduction interdite.</p>
+</footer>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data.js"></script> 
+    <script src="script.js" defer></script>
+</body>
+</html>
